@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기본 계산기</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="mom">
+      <h1>가격 계산기</h1>
+      <input
+        type="text"
+        id="display"
+        placeholder="전체가격"
+        value="0"
+        readonly
+      /><br />
+      <input
+        type="text"
+        id="real"
+        value="1인당 가격이 표시됩니다"
+        readonly
+      /><br />
+
+      <div id="button_list"></div>
+
+      <br /><br /><br />
+      <input
+        id="people"
+        type="text"
+        value=""
+        onchange="result()"
+        placeholder="인원수 입력"
+      /><br />
+      <input id="menu_name" type="text" placeholder="메뉴이름" />
+      <input id="funbox" type="text" placeholder="가격입력" />
+      <div>
+        <input
+          id="preview"
+          type="button"
+          value="추가하기"
+          onclick="pluse_block()"
+          class="pluse_block"
+        />
+        <button id="cl" onclick="cl()">초기화</button>
+      </div>
+    </div>
+
+    <script>
+      let box_number = 1;
+
+      function pluse_block() {
+        let menu_name = document.getElementById("menu_name").value;
+        let pluse_value = document.getElementById("funbox").value;
+        if (isNaN(pluse_value.trim())) {
+          alert("숫자만 입력해 주세요.");
+          document.getElementById("funbox").value = "";
+        } else {
+          if (pluse_value.trim() !== "") {
+            let newbox = document.createElement("button");
+            newbox.type = "button";
+            newbox.value = pluse_value;
+            newbox.id = "box_" + box_number;
+            newbox.innerText = menu_name + "\n" + pluse_value + "원";
+            newbox.onclick = showpluse;
+
+            document.getElementById("button_list").appendChild(newbox);
+
+            box_number++;
+            document.getElementById("funbox").value = "";
+            document.getElementById("menu_name").value = "";
+          }
+        }
+      }
+
+      function showpluse(e) {
+        let show = document.getElementById("display");
+        show.value = Math.round(
+          parseInt(show.value) + parseInt(e.target.value)
+        );
+        result();
+      }
+
+      function result() {
+        let real = document.getElementById("real");
+        let show = document.getElementById("display");
+        let people = document.getElementById("people");
+        if (
+          people.value.trim() === "" ||
+          isNaN(people.value) ||
+          people.value === "0"
+        ) {
+          real.value = 0;
+          alert("인원수오류");
+        } else {
+          real.value = Math.round(
+            parseInt(show.value) / parseInt(people.value)
+          );
+        }
+      }
+      function cl() {
+        let real = document.getElementById("real");
+        let show = document.getElementById("display");
+        let people = document.getElementById("people");
+
+        real.value = "1인당 가격이 표시됩니다";
+        show.value = "";
+        people.value = "";
+        //아니 왜 안됌??
+      }
+    </script>
+  </body>
+</html>
